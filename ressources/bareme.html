@@ -495,8 +495,9 @@
         headerRow += '</tr>'; 
         thead.innerHTML = headerRow; 
  
+        let tbodyHtml = '';
         for (let i = 0; i < rowsCount; i++) { 
-            const tr = document.createElement('tr'); 
+            let trHtml = '<tr>';
              
             for (let col = 0; col < groupsPerRow; col++) { 
                 const index = col * rowsCount + i;  
@@ -518,14 +519,16 @@
                         <td class="${passingClass} group-${index}" ${cellActions}>${item.points}</td> 
                         <td class="grade ${gradeColor} ${passingClass} col-end group-${index}" ${cellActions}>${gradeDisplay}</td> 
                     `; 
-                    tr.innerHTML += html; 
+                    trHtml += html;
                 } else { 
-                    if (showMistakes) tr.innerHTML += `<td></td>`; 
-                    tr.innerHTML += `<td></td><td class="col-end"></td>`; 
+                    if (showMistakes) trHtml += `<td></td>`;
+                    trHtml += `<td></td><td class="col-end"></td>`;
                 } 
             } 
-            tbody.appendChild(tr); 
-        } 
+            trHtml += '</tr>';
+            tbodyHtml += trHtml;
+        }
+        tbody.innerHTML = tbodyHtml;
     } 
  
     window.toggleHighlight = function(index) { 
