@@ -1,21 +1,21 @@
-<!DOCTYPE html> 
-<html lang="fr"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Tirage au Sort</title> 
-    <style> 
-        :root { 
-            --color-background: #f1f5f9; 
-            --color-surface: #ffffff; 
-            --color-text: #0f172a; 
-            --color-text-secondary: #64748b; 
-            --color-primary: #0d9488; 
-            --color-primary-hover: #0f766e; 
-            --color-primary-light: #ccfbf1; 
-            --color-border: #e2e8f0; 
-            --color-success: #10b981; 
-            --color-btn-text: #ffffff; 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tirage au Sort</title>
+    <style>
+        :root {
+            --color-background: #f1f5f9;
+            --color-surface: #ffffff;
+            --color-text: #0f172a;
+            --color-text-secondary: #64748b;
+            --color-primary: #0d9488;
+            --color-primary-hover: #0f766e;
+            --color-primary-light: #ccfbf1;
+            --color-border: #e2e8f0;
+            --color-success: #10b981;
+            --color-btn-text: #ffffff;
             --color-input-bg: #f8fafc;
             --color-cell-bg: #ffffff;
             --color-cell-hover: #f1f5f9;
@@ -28,9 +28,8 @@
             --color-finished-border: #a7f3d0;
             --color-btn-secondary-bg: #f1f5f9;
             --color-btn-secondary-hover: #e2e8f0;
-             
-            --radius-base: 12px; 
-            --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+            --radius-base: 12px;
+            --shadow-card: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
         }
 
         [data-theme="dark"] {
@@ -57,365 +56,398 @@
             --color-btn-secondary-bg: #334155;
             --color-btn-secondary-hover: #475569;
         }
- 
-        * { box-sizing: border-box; margin: 0; padding: 0; } 
- 
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            background-color: var(--color-background); 
-            color: var(--color-text); 
-            display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; padding: 20px; line-height: 1.5; 
-        } 
- 
-        .container { width: 100%; max-width: 550px; position: relative; } 
- 
-        .card { 
-            background-color: var(--color-surface); border-radius: var(--radius-base); 
-            border: 1px solid var(--color-border); padding: 32px; box-shadow: var(--shadow-card); 
-            position: relative; 
-        } 
- 
-        /* En-tête */ 
-        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; letter-spacing: -0.025em; } 
-        .subtitle { text-align: center; color: var(--color-text-secondary); margin-bottom: 32px; font-size: 14px; } 
- 
-        /* Action buttons (Audio/Theme) */ 
-        .action-buttons {
-            position: absolute; top: 20px; right: 20px; display: flex; gap: 8px;
-        }
-        .icon-action-btn { 
-            background: none; border: none; 
-            color: var(--color-text-secondary); cursor: pointer; padding: 8px; 
-            border-radius: 50%; transition: 0.2s; display: flex; align-items: center; justify-content: center; 
-        } 
-        .icon-action-btn:hover { background-color: var(--color-btn-secondary-bg); color: var(--color-text); } 
- 
-        /* Setup & Onglets */ 
-        .tabs { display: flex; gap: 8px; margin-bottom: 20px; background: var(--color-input-bg); padding: 4px; border-radius: 10px; border: 1px solid var(--color-border); } 
-        .tab-btn { 
-            flex: 1; padding: 10px; border: none; background: transparent; color: var(--color-text-secondary); 
-            font-weight: 600; font-size: 14px; border-radius: 6px; cursor: pointer; transition: 0.2s; 
-        } 
-        .tab-btn.active { background: var(--color-surface); color: var(--color-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); } 
- 
-        .form-group { margin-bottom: 24px; } 
-        input[type="number"], textarea { 
-            width: 100%; padding: 14px; font-size: 16px; border: 2px solid var(--color-border); 
-            border-radius: 8px; background-color: var(--color-input-bg); color: var(--color-text); transition: all 0.2s; 
-            font-family: inherit; resize: vertical; 
-        } 
-        input[type="number"] { text-align: center; font-size: 18px; } 
-        textarea { min-height: 120px; } 
-        input[type="number"]:focus, textarea:focus { outline: none; border-color: var(--color-primary); background-color: var(--color-surface); box-shadow: 0 0 0 3px var(--color-primary-light); } 
- 
-  footer { 
-            margin-top: 3rem; 
-            text-align: center; 
-            font-size: 0.75rem; 
-            color: var(--color-text-secondary); 
-            display: flex; 
-            flex-direction: column; 
-            gap: 0.5rem; 
-        } 
- 
-        footer a { color: inherit; text-decoration: underline; transition: color 0.2s; } 
-        footer a:hover { color: var(--color-primary); }     
-       
-        /* Boutons */ 
-        .controls { display: flex; gap: 12px; margin-top: 24px; } 
-        .btn { 
-            padding: 12px 20px; font-size: 15px; font-weight: 600; border: none; border-radius: 8px; 
-            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; 
-        } 
-        .btn-primary { background-color: var(--color-primary); color: var(--color-btn-text); box-shadow: 0 4px 6px -1px rgba(13, 148, 136, 0.2); } 
-        .btn-primary:hover:not(:disabled) { background-color: var(--color-primary-hover); transform: translateY(-1px); box-shadow: 0 6px 8px -1px rgba(13, 148, 136, 0.3); } 
-        .btn-primary:active:not(:disabled) { transform: translateY(0); } 
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; } 
-         
-        .btn-secondary { background-color: var(--color-btn-secondary-bg); color: var(--color-text-secondary); border: 1px solid var(--color-border); } 
-        .btn-secondary:hover:not(:disabled) { background-color: var(--color-btn-secondary-hover); color: var(--color-text); } 
- 
-        .icon-btn { background: none; border: none; cursor: pointer; padding: 4px; border-radius: 4px; transition: 0.2s; color: var(--color-text-secondary); display: inline-flex; } 
-        .icon-btn:hover { background: var(--color-btn-secondary-hover); color: var(--color-text); } 
- 
-        /* Zone de Résultat */ 
-        .result-area { 
-            text-align: center; margin: 24px 0; padding: 32px 24px; background-color: var(--color-input-bg); 
-            border-radius: var(--radius-base); border: 1px solid var(--color-border); 
-            min-height: 160px; display: flex; flex-direction: column; justify-content: center; align-items: center; 
-        } 
-        .result-number { font-size: 56px; font-weight: 800; color: var(--color-primary); line-height: 1.1; margin-bottom: 8px; word-break: break-word; } 
-        .result-number.is-number { font-size: 72px; font-variant-numeric: tabular-nums; } 
-        .result-label { font-size: 11px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; } 
-         
-        .pulse { animation: pulseEffect 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); } 
-        @keyframes pulseEffect { 0% { transform: scale(1); } 50% { transform: scale(1.15); text-shadow: 0 0 20px var(--color-primary-light); } 100% { transform: scale(1); } } 
-         
-        .rolling { opacity: 0.7; transform: scale(0.95); transition: 0.1s; } 
- 
-        .finished-message { 
-            background-color: var(--color-finished-bg); color: var(--color-finished-text); border: 1px solid var(--color-finished-border); 
-            padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; 
-            margin-top: 16px; text-align: center; display: none; animation: fadeIn 0.3s ease-in; 
-        } 
- 
-        /* Grille Participants */ 
-        .participants-section { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--color-border); } 
-        .section-header { font-size: 11px; font-weight: 700; margin-bottom: 8px; color: var(--color-text-secondary); text-align: center; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        .legend-container { font-size: 12px; color: var(--color-text-secondary); text-align: center; margin-bottom: 16px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px; line-height: 1.5;
+        }
+
+        .container { width: 100%; max-width: 650px; position: relative; }
+
+        .card {
+            background-color: var(--color-surface); border-radius: var(--radius-base);
+            border: 1px solid var(--color-border); padding: 32px; box-shadow: var(--shadow-card);
+            position: relative;
+        }
+
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; letter-spacing: -0.025em; }
+        .subtitle { text-align: center; color: var(--color-text-secondary); margin-bottom: 32px; font-size: 14px; }
+
+        /* Bouton retour (flèche) — haut gauche */
+        .back-btn {
+            position: absolute; top: 20px; left: 20px;
+            background: none; border: none;
+            color: var(--color-text-secondary); cursor: pointer; padding: 8px;
+            border-radius: 50%; transition: 0.2s;
+            display: none; align-items: center; justify-content: center;
+        }
+        .back-btn:hover { background-color: var(--color-btn-secondary-bg); color: var(--color-text); }
+
+        /* Boutons action (thème / son) — haut droite */
+        .action-buttons { position: absolute; top: 20px; right: 20px; display: flex; gap: 8px; }
+        .icon-action-btn {
+            background: none; border: none;
+            color: var(--color-text-secondary); cursor: pointer; padding: 8px;
+            border-radius: 50%; transition: 0.2s; display: flex; align-items: center; justify-content: center;
+        }
+        .icon-action-btn:hover { background-color: var(--color-btn-secondary-bg); color: var(--color-text); }
+
+        /* Onglets */
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; background: var(--color-input-bg); padding: 4px; border-radius: 10px; border: 1px solid var(--color-border); }
+        .tab-btn {
+            flex: 1; padding: 10px; border: none; background: transparent; color: var(--color-text-secondary);
+            font-weight: 600; font-size: 14px; border-radius: 6px; cursor: pointer; transition: 0.2s;
+        }
+        .tab-btn.active { background: var(--color-surface); color: var(--color-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        .form-group { margin-bottom: 24px; }
+        input[type="number"], textarea {
+            width: 100%; padding: 14px; font-size: 16px; border: 2px solid var(--color-border);
+            border-radius: 8px; background-color: var(--color-input-bg); color: var(--color-text); transition: all 0.2s;
+            font-family: inherit; resize: vertical;
+        }
+        input[type="number"] { text-align: center; font-size: 18px; }
+        textarea { min-height: 120px; }
+        input[type="number"]:focus, textarea:focus { outline: none; border-color: var(--color-primary); background-color: var(--color-surface); box-shadow: 0 0 0 3px var(--color-primary-light); }
+
+        /* Boutons */
+        .controls { display: flex; gap: 12px; margin-top: 24px; }
+        .btn {
+            padding: 12px 20px; font-size: 15px; font-weight: 600; border: none; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+        }
+        .btn-primary { background-color: var(--color-primary); color: var(--color-btn-text); box-shadow: 0 4px 6px -1px rgba(13,148,136,0.2); }
+        .btn-primary:hover:not(:disabled) { background-color: var(--color-primary-hover); transform: translateY(-1px); box-shadow: 0 6px 8px -1px rgba(13,148,136,0.3); }
+        .btn-primary:active:not(:disabled) { transform: translateY(0); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
+
+        .btn-secondary { background-color: var(--color-btn-secondary-bg); color: var(--color-text-secondary); border: 1px solid var(--color-border); }
+        .btn-secondary:hover:not(:disabled) { background-color: var(--color-btn-secondary-hover); color: var(--color-text); }
+
+        .btn-reset { margin-top: 24px; padding: 10px 16px; font-size: 13px; }
+
+        .icon-btn { background: none; border: none; cursor: pointer; padding: 4px; border-radius: 4px; transition: 0.2s; color: var(--color-text-secondary); display: inline-flex; }
+        .icon-btn:hover { background: var(--color-btn-secondary-hover); color: var(--color-text); }
+
+        /* Zone de résultat */
+        .result-area {
+            text-align: center; margin: 24px 0; padding: 32px 24px; background-color: var(--color-input-bg);
+            border-radius: var(--radius-base); border: 1px solid var(--color-border);
+            min-height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .result-number { font-size: 56px; font-weight: 800; color: var(--color-primary); line-height: 1.1; word-break: break-word; }
+        .result-number.is-number { font-size: 72px; font-variant-numeric: tabular-nums; }
+
+        .pulse { animation: pulseEffect 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pulseEffect { 0% { transform: scale(1); } 50% { transform: scale(1.15); text-shadow: 0 0 20px var(--color-primary-light); } 100% { transform: scale(1); } }
+        .rolling { opacity: 0.7; transform: scale(0.95); transition: 0.1s; }
+
+        .finished-message {
+            background-color: var(--color-finished-bg); color: var(--color-finished-text); border: 1px solid var(--color-finished-border);
+            padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px;
+            margin-bottom: 8px; text-align: center; display: none; animation: fadeIn 0.3s ease-in;
+        }
+
+        /* Deux colonnes : Participants + Historique */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .column-panel {
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 80px;
+        }
+
+        .column-panel .section-header {
+            font-size: 11px; font-weight: 700; margin-bottom: 8px;
+            color: var(--color-text-secondary); text-align: center;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            display: flex; justify-content: center; align-items: center; gap: 6px;
+        }
+
+        /* Grille participants */
+        .grid-wrapper { max-height: 250px; overflow-y: auto; padding: 4px; margin: -4px; }
+        .grid-wrapper::-webkit-scrollbar { width: 6px; }
+        .grid-wrapper::-webkit-scrollbar-track { background: var(--color-input-bg); border-radius: 4px; }
+        .grid-wrapper::-webkit-scrollbar-thumb { background: var(--color-text-secondary); border-radius: 4px; }
+        .grid-wrapper::-webkit-scrollbar-thumb:hover { background: var(--color-text); }
+
+        .grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+
+        .cell {
+            min-width: 42px; height: 42px; padding: 0 10px;
+            display: flex; align-items: center; justify-content: center;
+            background-color: var(--color-cell-bg); border: 1px solid var(--color-border);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05); border-radius: 8px; font-size: 14px; font-weight: 600;
+            color: var(--color-text); cursor: pointer; transition: all 0.15s ease; user-select: none;
+        }
+        .cell:hover { border-color: var(--color-primary); background-color: var(--color-cell-hover); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); color: var(--color-primary); }
+        .cell:active { transform: translateY(0) scale(0.95); }
+        .cell.drawn { opacity: 0.5; background-color: var(--color-cell-drawn); border-color: transparent; text-decoration: line-through; color: var(--color-cell-drawn-text); transform: none; box-shadow: none; }
+        .cell.excluded { opacity: 0.6; background-color: var(--color-cell-excluded); border-color: transparent; text-decoration: line-through; color: var(--color-cell-excluded-text); transform: none; box-shadow: none; }
+
+        /* Historique */
+        .history-scroll { max-height: 250px; overflow-y: auto; }
+        .history-scroll::-webkit-scrollbar { width: 6px; }
+        .history-scroll::-webkit-scrollbar-track { background: var(--color-input-bg); border-radius: 4px; }
+        .history-scroll::-webkit-scrollbar-thumb { background: var(--color-text-secondary); border-radius: 4px; }
+
+        .history-badges { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+        .history-badge { background-color: var(--color-primary); color: #ffffff; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; animation: fadeIn 0.3s ease-out; box-shadow: 0 2px 4px rgba(13,148,136,0.2); }
+        .history-placeholder { color: var(--color-text-secondary); font-size: 12px; font-style: italic; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Légende */
+        .legend-container { font-size: 12px; color: var(--color-text-secondary); text-align: center; margin-top: 20px; }
         .legend-item { display: inline-flex; align-items: center; margin: 0 6px; }
         .legend-dot { width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; border: 1px solid transparent; }
         .legend-dot.available { background-color: var(--color-cell-bg); border-color: var(--color-border); }
         .legend-dot.excluded { background-color: var(--color-cell-excluded); border-color: var(--color-cell-excluded-text); }
         .legend-dot.drawn { background-color: var(--color-cell-drawn); border-color: var(--color-cell-drawn-text); }
-         
-        .grid-wrapper { max-height: 220px; overflow-y: auto; padding: 4px; margin: -4px; } 
-        /* Style scrollbar */ 
-        .grid-wrapper::-webkit-scrollbar { width: 6px; } 
-        .grid-wrapper::-webkit-scrollbar-track { background: var(--color-input-bg); border-radius: 4px; } 
-        .grid-wrapper::-webkit-scrollbar-thumb { background: var(--color-text-secondary); border-radius: 4px; } 
-        .grid-wrapper::-webkit-scrollbar-thumb:hover { background: var(--color-text); } 
- 
-        .grid { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; } 
-         
-        .cell { 
-            min-width: 42px; height: 42px; padding: 0 12px; 
-            display: flex; align-items: center; justify-content: center; 
-            background-color: var(--color-cell-bg); border: 1px solid var(--color-border); 
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05); border-radius: 8px; font-size: 15px; font-weight: 600; 
-            color: var(--color-text); cursor: pointer; transition: all 0.15s ease; user-select: none; 
-        } 
-        .cell:hover { border-color: var(--color-primary); background-color: var(--color-cell-hover); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); color: var(--color-primary); } 
-        .cell:active { transform: translateY(0) scale(0.95); } 
-         
-        /* Distinction Exclu vs Tiré */ 
-        .cell.drawn { opacity: 0.5; background-color: var(--color-cell-drawn); border-color: transparent; text-decoration: line-through; color: var(--color-cell-drawn-text); transform: none; box-shadow: none; } 
-        .cell.excluded { opacity: 0.6; background-color: var(--color-cell-excluded); border-color: transparent; text-decoration: line-through; color: var(--color-cell-excluded-text); transform: none; box-shadow: none; } 
- 
-        /* Historique */ 
-        .history-section { margin-top: 24px; text-align: center; display: none; } 
-        .history-badges { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; } 
-        .history-badge { background-color: var(--color-primary); color: #ffffff; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; animation: fadeIn 0.3s ease-out; box-shadow: 0 2px 4px rgba(13, 148, 136, 0.2); } 
-         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } } 
-         
-        /* Toast Notification */ 
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: #1e293b; color: white; padding: 10px 20px; border-radius: 30px; font-weight: 600; font-size: 13px; opacity: 0; transition: 0.3s; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.2); } 
-        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; } 
+
+        /* Footer */
+        footer {
+            margin-top: 2rem; text-align: center; font-size: 0.75rem;
+            color: var(--color-text-secondary); display: flex; flex-direction: column; gap: 0.5rem;
+        }
+        footer a { color: inherit; text-decoration: underline; transition: color 0.2s; }
+        footer a:hover { color: var(--color-primary); }
+
+        /* Toast */
+        #toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #1e293b; color: white; padding: 10px 20px; border-radius: 30px;
+            font-weight: 600; font-size: 13px; opacity: 0; transition: 0.3s; z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
         #toast.toast-error { background: #dc2626; }
         #toast.toast-success { background: #10b981; }
 
-        /* Media Queries pour Responsive Design */
+        /* Responsive */
         @media (max-width: 600px) {
-            .card {
-                padding: 24px 16px;
-            }
-            .action-buttons {
-                top: 12px;
-                right: 12px;
-            }
-            h1 {
-                font-size: 20px;
-                margin-top: 10px;
-            }
-            .result-area {
-                padding: 24px 16px;
-                min-height: 120px;
-            }
-            .result-number {
-                font-size: 40px;
-            }
-            .result-number.is-number {
-                font-size: 56px;
-            }
-            .controls {
-                flex-direction: column;
-            }
-            .btn {
-                width: 100%;
-            }
+            .card { padding: 24px 16px; }
+            .action-buttons { top: 12px; right: 12px; }
+            .back-btn { top: 12px; left: 12px; }
+            h1 { font-size: 20px; margin-top: 10px; }
+            .result-area { padding: 24px 16px; min-height: 100px; }
+            .result-number { font-size: 40px; }
+            .result-number.is-number { font-size: 56px; }
+            .controls { flex-direction: column; }
+            .btn { width: 100%; }
+            .two-columns { grid-template-columns: 1fr; }
         }
-    </style> 
-</head> 
-<body> 
-    <div class="container"> 
-        <div class="card"> 
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <!-- NOUVEAU : Bouton retour (haut gauche) — revient à la configuration -->
+            <button class="back-btn" id="backBtn" title="Retour à la configuration">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+
             <div class="action-buttons">
                 <button class="icon-action-btn" id="themeToggleBtn" title="Mode sombre/clair">
                     <svg id="icon-sun" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
                     <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
-                <button class="icon-action-btn" id="audioToggleBtn" title="Activer/Désactiver le son"> 
-                    <svg id="icon-vol-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg> 
-                    <svg id="icon-vol-off" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg> 
-                </button> 
+                <button class="icon-action-btn" id="audioToggleBtn" title="Activer/Désactiver le son">
+                    <svg id="icon-vol-on" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <svg id="icon-vol-off" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                </button>
             </div>
- 
-            <h1>🎲 Tirage au Sort</h1> 
-            <p class="subtitle" id="subtitle">Générez un gagnant au hasard</p> 
- 
-            <!-- Écran de Configuration --> 
-            <div id="setupForm"> 
-                <div class="tabs"> 
-                    <button class="tab-btn active" data-target="mode-number">Nombres</button> 
-                    <button class="tab-btn" data-target="mode-names">Liste de Noms</button> 
-                </div> 
-                 
-                <div id="mode-number" class="form-group"> 
-                    <input type="number" id="totalParticipants" min="1" placeholder="Nombre de participants (ex: 20)" autofocus> 
-                </div> 
-                 
-                <div id="mode-names" class="form-group" style="display:none;"> 
-                    <textarea id="namesList" placeholder="Collez votre liste ici...&#10;Jean, Marie, Paul&#10;Ou un prénom par ligne"></textarea> 
-                </div> 
- 
-                <button class="btn btn-primary" id="initBtn"> 
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 
-                    Démarrer (Entrée) 
-                </button> 
-            </div> 
- 
-            <!-- Écran de Tirage --> 
-            <div id="drawInterface" style="display: none;"> 
-                <div class="subtitle" id="statsDisplay" style="margin-bottom: 20px;" aria-live="polite"></div> 
- 
-                <div class="result-area" aria-live="polite"> 
-                    <div class="result-number" id="drawnNumber">?</div> 
-                    <div class="result-label">Numéro gagnant</div> 
-                </div> 
- 
-                <div class="finished-message" id="finishedMsg" aria-live="polite"> 
-                    <svg style="vertical-align: bottom; margin-right: 5px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> 
-                    Tirage terminé ! 
-                </div> 
- 
-                <div class="controls"> 
-                    <button class="btn btn-secondary" id="resetBtn" style="flex: 1;"> 
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg> 
-                        Reset 
-                    </button> 
-                    <button class="btn btn-primary" id="drawBtn" style="flex: 2;"> 
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 8h.01"></path><path d="M8 8h.01"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path><path d="M12 12h.01"></path></svg> 
-                        Tirer (Entrée) 
-                    </button> 
-                </div> 
- 
-                <div class="history-section" id="historySection"> 
-                    <div class="section-header" style="display: flex; justify-content: center; align-items: center; gap: 6px;"> 
-                        Historique 
-                        <button class="icon-btn" id="copyBtn" title="Copier l'historique"> 
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> 
-                        </button> 
-                    </div> 
-                    <div class="history-badges" id="historyBadges"></div> 
-                </div> 
- 
-                <div class="participants-section"> 
-                    <div class="section-header">Participants restants</div> 
-                    <div class="legend-container">
-                        Cycle de clic :
-                        <span class="legend-item"><span class="legend-dot available"></span>Disponible</span> ➔
-                        <span class="legend-item"><span class="legend-dot excluded"></span>Absent</span> ➔
-                        <span class="legend-item"><span class="legend-dot drawn"></span>Tiré manuellement</span>
+
+            <h1>🎲 Tirage au Sort</h1>
+            <p class="subtitle" id="subtitle">Générez un résultat au hasard</p>
+
+            <!-- Écran de Configuration -->
+            <div id="setupForm">
+                <div class="tabs">
+                    <button class="tab-btn active" data-target="mode-number">Nombres</button>
+                    <button class="tab-btn" data-target="mode-names">Liste de Noms</button>
+                </div>
+
+                <div id="mode-number" class="form-group">
+                    <input type="number" id="totalParticipants" min="1" placeholder="Nombre de participants (ex: 20)" autofocus>
+                </div>
+
+                <div id="mode-names" class="form-group" style="display:none;">
+                    <textarea id="namesList" placeholder="Collez votre liste ici...&#10;Jean, Marie, Paul&#10;Ou un prénom par ligne"></textarea>
+                </div>
+
+                <button class="btn btn-primary" id="initBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    Démarrer (Entrée)
+                </button>
+            </div>
+
+            <!-- Écran de Tirage -->
+            <div id="drawInterface" style="display: none;">
+                <div class="subtitle" id="statsDisplay" style="margin-bottom: 20px;" aria-live="polite"></div>
+
+                <!-- MODIFIÉ : Plus de label sous le résultat -->
+                <div class="result-area" aria-live="polite">
+                    <div class="result-number" id="drawnNumber">?</div>
+                </div>
+
+                <div class="finished-message" id="finishedMsg" aria-live="polite">
+                    <svg style="vertical-align: bottom; margin-right: 5px;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    Tirage terminé !
+                </div>
+
+                <!-- MODIFIÉ : Seulement le bouton Tirer -->
+                <div class="controls">
+                    <button class="btn btn-primary" id="drawBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 8h.01"></path><path d="M8 8h.01"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path><path d="M12 12h.01"></path></svg>
+                        Tirer (Entrée)
+                    </button>
+                </div>
+
+                <!-- NOUVEAU : Participants + Historique côte à côte -->
+                <div class="two-columns">
+                    <div class="column-panel">
+                        <div class="grid-wrapper">
+                            <div class="grid" id="participantItems"></div>
+                        </div>
                     </div>
-                    <div class="grid-wrapper"> 
-                        <div class="grid" id="participantItems"></div> 
-                    </div> 
-                </div> 
-            </div> 
-              <footer class="no-print"> 
-        <p> 
-            Webapp disponible sous licence  
-            <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>
-            — Animation Education Numérique ·  
-            <a href="https://www.hepvs.ch/fr/prestations-de-services/animation-pedagogique-12811/" target="_blank" rel="noopener noreferrer">HEP-VS</a> 
-        </p> 
-    </footer> 
-        </div> 
-    </div> 
-    <div id="toast">Copié dans le presse-papier !</div> 
- 
-    <script> 
-        // ========================================== 
-        // ETAT & CONFIGURATION 
-        // ========================================== 
-        const STATE_KEY = 'tirage_sort_v2'; 
-        let state = { 
-            mode: 'number', // 'number' ou 'names' 
-            allParticipants: [], 
-            availableParticipants: [], 
-            drawnParticipants:[], 
-            excludedParticipants: [], 
-            drawHistory:[] 
-        }; 
-        let isDrawing = false; 
-         
-        // ========================================== 
-        // AUDIO (Web Audio API) 
-        // ========================================== 
-        let audioCtx = null; 
-        let isMuted = false; 
-         
-        function initAudio() { 
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
-            if (audioCtx.state === 'suspended') audioCtx.resume(); 
-        } 
-        function playTick() { 
-            if (isMuted || !audioCtx) return; 
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); 
-            osc.connect(gain); gain.connect(audioCtx.destination); 
-            osc.type = 'square'; osc.frequency.setValueAtTime(600, audioCtx.currentTime); 
-            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05); 
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05); 
-            osc.start(); osc.stop(audioCtx.currentTime + 0.05); 
-        } 
-        function playDing() { 
-            if (isMuted || !audioCtx) return; 
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); 
-            osc.connect(gain); gain.connect(audioCtx.destination); 
-            osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); 
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8); 
-            osc.start(); osc.stop(audioCtx.currentTime + 0.8); 
-        } 
- 
-        // ========================================== 
-        // ÉLÉMENTS DOM 
-        // ========================================== 
-        const totalInput = document.getElementById('totalParticipants'); 
-        const namesInput = document.getElementById('namesList'); 
-        const initBtn = document.getElementById('initBtn'); 
-        const drawBtn = document.getElementById('drawBtn'); 
-        const resetBtn = document.getElementById('resetBtn'); 
-        const copyBtn = document.getElementById('copyBtn'); 
-        const drawnNumber = document.getElementById('drawnNumber'); 
-        const participantItems = document.getElementById('participantItems'); 
-        const drawInterface = document.getElementById('drawInterface'); 
-        const setupForm = document.getElementById('setupForm'); 
-        const subtitle = document.getElementById('subtitle'); 
-        const statsDisplay = document.getElementById('statsDisplay'); 
-        const finishedMsg = document.getElementById('finishedMsg'); 
-        const historySection = document.getElementById('historySection'); 
-        const historyBadges = document.getElementById('historyBadges'); 
-         
-        // Onglets 
-        document.querySelectorAll('.tab-btn').forEach(btn => { 
-            btn.addEventListener('click', (e) => { 
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
-                e.target.classList.add('active'); 
-                state.mode = e.target.dataset.target === 'mode-number' ? 'number' : 'names'; 
-                document.getElementById('mode-number').style.display = state.mode === 'number' ? 'block' : 'none'; 
-                document.getElementById('mode-names').style.display = state.mode === 'names' ? 'block' : 'none'; 
-            }); 
-        }); 
- 
-        // Toggle Audio 
-        document.getElementById('audioToggleBtn').addEventListener('click', () => { 
-            isMuted = !isMuted; 
-            document.getElementById('icon-vol-on').style.display = isMuted ? 'none' : 'block'; 
-            document.getElementById('icon-vol-off').style.display = isMuted ? 'block' : 'none'; 
-        }); 
+                    <div class="column-panel">
+                        <div class="section-header">
+                            Historique
+                            <button class="icon-btn" id="copyBtn" title="Copier l'historique">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                        <div class="history-scroll">
+                            <div class="history-badges" id="historyBadges"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODIFIÉ : Reset en bas, remet le tirage à zéro uniquement -->
+                <button class="btn btn-secondary btn-reset" id="resetBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M16 21h5v-5"></path></svg>
+                    Réinitialiser le tirage
+                </button>
+
+                <!-- MODIFIÉ : Légende sous le reset, avant le footer -->
+                <div class="legend-container">
+                    Cycle de clic :
+                    <span class="legend-item"><span class="legend-dot available"></span>Disponible</span> →
+                    <span class="legend-item"><span class="legend-dot excluded"></span>Absent</span> →
+                    <span class="legend-item"><span class="legend-dot drawn"></span>Tiré</span>
+                </div>
+            </div>
+
+            <footer>
+                <p>
+                    Webapp disponible sous licence
+                    <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>
+                    — Animation Education Numérique ·
+                    <a href="https://www.hepvs.ch/fr/prestations-de-services/animation-pedagogique-12811/" target="_blank" rel="noopener noreferrer">HEP-VS</a>
+                </p>
+            </footer>
+        </div>
+    </div>
+    <div id="toast">Copié dans le presse-papier !</div>
+
+    <script>
+        // ==========================================
+        // ÉTAT & CONFIGURATION
+        // ==========================================
+        const STATE_KEY = 'tirage_sort_v2';
+        let state = {
+            mode: 'number',
+            allParticipants: [],
+            availableParticipants: [],
+            drawnParticipants: [],
+            excludedParticipants: [],
+            drawHistory: []
+        };
+        let isDrawing = false;
+
+        // ==========================================
+        // AUDIO (Web Audio API)
+        // ==========================================
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+        function playTick() {
+            if (isMuted || !audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'square'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+        }
+        function playDing() {
+            if (isMuted || !audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.8);
+        }
+
+        // ==========================================
+        // ÉLÉMENTS DOM
+        // ==========================================
+        const totalInput = document.getElementById('totalParticipants');
+        const namesInput = document.getElementById('namesList');
+        const initBtn = document.getElementById('initBtn');
+        const drawBtn = document.getElementById('drawBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const backBtn = document.getElementById('backBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const drawnNumber = document.getElementById('drawnNumber');
+        const participantItems = document.getElementById('participantItems');
+        const drawInterface = document.getElementById('drawInterface');
+        const setupForm = document.getElementById('setupForm');
+        const subtitle = document.getElementById('subtitle');
+        const statsDisplay = document.getElementById('statsDisplay');
+        const finishedMsg = document.getElementById('finishedMsg');
+        const historyBadges = document.getElementById('historyBadges');
+
+        // Onglets
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                state.mode = e.target.dataset.target === 'mode-number' ? 'number' : 'names';
+                document.getElementById('mode-number').style.display = state.mode === 'number' ? 'block' : 'none';
+                document.getElementById('mode-names').style.display = state.mode === 'names' ? 'block' : 'none';
+            });
+        });
+
+        // Toggle Audio
+        document.getElementById('audioToggleBtn').addEventListener('click', () => {
+            isMuted = !isMuted;
+            document.getElementById('icon-vol-on').style.display = isMuted ? 'none' : 'block';
+            document.getElementById('icon-vol-off').style.display = isMuted ? 'block' : 'none';
+        });
 
         // Toggle Theme
         const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -425,256 +457,267 @@
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
-            if (theme === 'dark') {
-                iconSun.style.display = 'block';
-                iconMoon.style.display = 'none';
-            } else {
-                iconSun.style.display = 'none';
-                iconMoon.style.display = 'block';
-            }
+            iconSun.style.display = theme === 'dark' ? 'block' : 'none';
+            iconMoon.style.display = theme === 'dark' ? 'none' : 'block';
         }
 
-        // Initialize Theme
         const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         setTheme(savedTheme);
 
         themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            const current = document.documentElement.getAttribute('data-theme');
+            setTheme(current === 'dark' ? 'light' : 'dark');
         });
- 
-        // Feedback Toasts
+
+        // Toast
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             toast.textContent = message;
-            toast.className = ''; // Reset classes
-            if (type === 'error') {
-                toast.classList.add('toast-error');
-            } else if (type === 'success') {
-                toast.classList.add('toast-success');
-            }
+            toast.className = '';
+            if (type === 'error') toast.classList.add('toast-error');
+            else if (type === 'success') toast.classList.add('toast-success');
             toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        // Copy Historique 
-        copyBtn.addEventListener('click', () => { 
-            if(state.drawHistory.length === 0) return; 
-            navigator.clipboard.writeText(state.drawHistory.join('\n')).then(() => { 
+        // Copy Historique
+        copyBtn.addEventListener('click', () => {
+            if (state.drawHistory.length === 0) return;
+            navigator.clipboard.writeText(state.drawHistory.join('\n')).then(() => {
                 showToast("Copié dans le presse-papier !", "success");
-            }).catch(err => {
+            }).catch(() => {
                 showToast("Erreur lors de la copie", "error");
             });
-        }); 
- 
-        // ========================================== 
-        // LOGIQUE PRINCIPALE 
-        // ========================================== 
-        initBtn.addEventListener('click', initializeDraw); 
-        drawBtn.addEventListener('click', triggerRoulette); 
-        resetBtn.addEventListener('click', resetDraw); 
- 
-        document.addEventListener('keydown', (e) => { 
-            if (e.key === 'Enter') { 
-                if (drawInterface.style.display === 'none' && document.activeElement !== namesInput) initializeDraw(); 
-                else if (drawInterface.style.display === 'block' && !drawBtn.disabled) triggerRoulette(); 
-            } 
-        }); 
- 
-        function saveState() { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } 
-        function loadState() { 
-            const saved = localStorage.getItem(STATE_KEY); 
-            if (saved) { 
-                state = JSON.parse(saved); 
-                document.querySelector('.result-label').textContent = state.mode === 'names' ? 'Gagnant' : 'Numéro gagnant'; 
-                drawnNumber.classList.toggle('is-number', state.mode === 'number'); 
-                setupForm.style.display = 'none'; subtitle.style.display = 'none'; 
-                drawInterface.style.display = 'block'; 
-                updateUI(); 
-            } 
-        } 
- 
-        function initializeDraw() { 
-            initAudio(); 
-            let parsedList =[]; 
-             
-            if (state.mode === 'number') { 
-                const max = parseInt(totalInput.value); 
-                if (!max || max < 1) return showToast('Veuillez entrer un nombre valide.', 'error'); 
-                parsedList = Array.from({ length: max }, (_, i) => String(i + 1)); 
-            } else { 
-                const text = namesInput.value; 
-                parsedList = text.split(/[\n,]+/).map(n => n.trim()).filter(n => n.length > 0); 
-                if (parsedList.length === 0) return showToast('Veuillez entrer au moins un nom.', 'error'); 
-            } 
- 
-            state.allParticipants = [...parsedList]; 
-            state.availableParticipants = [...parsedList]; 
-            state.drawnParticipants = []; 
-            state.excludedParticipants = []; 
-            state.drawHistory =[]; 
-             
-            document.querySelector('.result-label').textContent = state.mode === 'names' ? 'Gagnant' : 'Numéro gagnant'; 
-            drawnNumber.classList.toggle('is-number', state.mode === 'number'); 
-            drawnNumber.textContent = '?'; 
-            drawnNumber.classList.remove('pulse'); 
- 
-            saveState(); 
-            setupForm.style.display = 'none'; subtitle.style.display = 'none'; 
-            drawInterface.style.display = 'block'; 
-            updateUI(); 
-        } 
- 
-        function triggerRoulette() { 
-            if (isDrawing || state.availableParticipants.length === 0) return; 
-            isDrawing = true; drawBtn.disabled = true; initAudio(); 
- 
-            let elapsed = 0; const duration = 1500; const interval = 60; 
-            drawnNumber.classList.add('rolling'); 
- 
-            const timer = setInterval(() => { 
-                elapsed += interval; 
-                drawnNumber.textContent = state.availableParticipants[Math.floor(Math.random() * state.availableParticipants.length)]; 
-                playTick(); 
- 
-                if (elapsed >= duration) { 
-                    clearInterval(timer); 
-                    finalizeDraw(); 
-                } 
-            }, interval); 
-        } 
- 
-        function finalizeDraw() { 
-            const randomIndex = Math.floor(Math.random() * state.availableParticipants.length); 
-            const winner = state.availableParticipants[randomIndex]; 
- 
-            state.drawnParticipants.push(winner); 
-            state.drawHistory.push(winner); 
-            state.availableParticipants.splice(randomIndex, 1); 
- 
-            drawnNumber.classList.remove('rolling'); 
-            drawnNumber.textContent = winner; 
-             
-            drawnNumber.classList.remove('pulse'); 
-            void drawnNumber.offsetWidth;  
-            drawnNumber.classList.add('pulse'); 
- 
-            playDing(); 
-            isDrawing = false; 
-            saveState(); 
-            updateUI(); 
-        } 
- 
-        function toggleParticipantState(itemStr) { 
-            // Available -> Excluded -> Drawn -> Available
-            let idxAvailable = state.availableParticipants.indexOf(itemStr);
-            let idxExcluded = state.excludedParticipants.indexOf(itemStr);
-            let idxDrawn = state.drawnParticipants.indexOf(itemStr);
+        });
 
-            if (idxAvailable > -1) {
-                // State 1: Available -> go to Excluded (Absent)
-                state.availableParticipants.splice(idxAvailable, 1);
-                state.excludedParticipants.push(itemStr); 
-            } else if (idxExcluded > -1) {
-                // State 2: Excluded -> go to Drawn (Tiré manuellement)
-                state.excludedParticipants.splice(idxExcluded, 1);
-                state.drawnParticipants.push(itemStr);
-                state.drawHistory.push(itemStr);
-            } else if (idxDrawn > -1) {
-                // State 3: Drawn -> go back to Available
-                state.drawnParticipants.splice(idxDrawn, 1);
-                state.availableParticipants.push(itemStr);
+        // ==========================================
+        // NAVIGATION ENTRE ÉCRANS
+        // ==========================================
+        function showDrawMode() {
+            setupForm.style.display = 'none';
+            subtitle.style.display = 'none';
+            drawInterface.style.display = 'block';
+            backBtn.style.display = 'flex';
+        }
 
-                // Remove from history but maintain history order for others
-                const historyIdx = state.drawHistory.lastIndexOf(itemStr);
-                if (historyIdx > -1) {
-                    state.drawHistory.splice(historyIdx, 1);
-                }
+        function showSetupMode() {
+            setupForm.style.display = 'block';
+            subtitle.style.display = 'block';
+            drawInterface.style.display = 'none';
+            backBtn.style.display = 'none';
+        }
 
-                // Clear drawn number display if it was the currently shown one
-                if(drawnNumber.textContent === itemStr) {
-                    drawnNumber.textContent = '?';
-                }
+        // ==========================================
+        // LOGIQUE PRINCIPALE
+        // ==========================================
+        initBtn.addEventListener('click', initializeDraw);
+        drawBtn.addEventListener('click', triggerRoulette);
+        resetBtn.addEventListener('click', softReset);
+        backBtn.addEventListener('click', goBack);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (drawInterface.style.display === 'none' && document.activeElement !== namesInput) initializeDraw();
+                else if (drawInterface.style.display === 'block' && !drawBtn.disabled) triggerRoulette();
             }
+        });
 
-            // Sort available 
-            if(state.mode === 'number') {
-                state.availableParticipants.sort((a,b) => parseInt(a)-parseInt(b));
+        function saveState() { localStorage.setItem(STATE_KEY, JSON.stringify(state)); }
+
+        function loadState() {
+            const saved = localStorage.getItem(STATE_KEY);
+            if (saved) {
+                state = JSON.parse(saved);
+                drawnNumber.classList.toggle('is-number', state.mode === 'number');
+                showDrawMode();
+                updateUI();
+            }
+        }
+
+        function initializeDraw() {
+            initAudio();
+            let parsedList = [];
+
+            if (state.mode === 'number') {
+                const max = parseInt(totalInput.value);
+                if (!max || max < 1) return showToast('Veuillez entrer un nombre valide.', 'error');
+                parsedList = Array.from({ length: max }, (_, i) => String(i + 1));
             } else {
-                state.availableParticipants.sort();
+                const text = namesInput.value;
+                parsedList = text.split(/[\n,]+/).map(n => n.trim()).filter(n => n.length > 0);
+                if (parsedList.length === 0) return showToast('Veuillez entrer au moins un nom.', 'error');
             }
-             
-            saveState(); updateUI(); 
-        } 
- 
-        function resetDraw() { 
-            if(confirm("Voulez-vous réinitialiser et retourner à la configuration ?")) { 
-                localStorage.removeItem(STATE_KEY); 
-                setupForm.style.display = 'block'; subtitle.style.display = 'block'; 
-                drawInterface.style.display = 'none'; 
-            } 
-        } 
- 
-        function updateUI() { 
-            statsDisplay.textContent = `Restants : ${state.availableParticipants.length} / ${state.allParticipants.length}`; 
- 
-            if (state.availableParticipants.length === 0) { 
-                drawBtn.disabled = true; drawBtn.innerHTML = `Terminé`; 
-                finishedMsg.style.display = 'block'; 
-            } else { 
-                drawBtn.disabled = false; 
-                drawBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 8h.01"></path><path d="M8 8h.01"></path><path d="M8 16h.01"></path><path d="M16 16h.01"></path><path d="M12 12h.01"></path></svg> Tirer (Entrée)`; 
-                finishedMsg.style.display = 'none'; 
-            } 
- 
-            if (state.drawHistory.length > 0) { 
-                historySection.style.display = 'block'; 
-                historyBadges.textContent = '';
-                state.drawHistory.forEach(num => {
+
+            state.allParticipants = [...parsedList];
+            state.availableParticipants = [...parsedList];
+            state.drawnParticipants = [];
+            state.excludedParticipants = [];
+            state.drawHistory = [];
+
+            drawnNumber.classList.toggle('is-number', state.mode === 'number');
+            drawnNumber.textContent = '?';
+            drawnNumber.classList.remove('pulse');
+
+            saveState();
+            showDrawMode();
+            updateUI();
+        }
+
+        function triggerRoulette() {
+            if (isDrawing || state.availableParticipants.length === 0) return;
+            isDrawing = true; drawBtn.disabled = true; initAudio();
+
+            let elapsed = 0; const duration = 1500; const interval = 60;
+            drawnNumber.classList.add('rolling');
+
+            const timer = setInterval(() => {
+                elapsed += interval;
+                drawnNumber.textContent = state.availableParticipants[Math.floor(Math.random() * state.availableParticipants.length)];
+                playTick();
+                if (elapsed >= duration) { clearInterval(timer); finalizeDraw(); }
+            }, interval);
+        }
+
+        function finalizeDraw() {
+            const randomIndex = Math.floor(Math.random() * state.availableParticipants.length);
+            const winner = state.availableParticipants[randomIndex];
+
+            state.drawnParticipants.push(winner);
+            state.drawHistory.push(winner);
+            state.availableParticipants.splice(randomIndex, 1);
+
+            drawnNumber.classList.remove('rolling');
+            drawnNumber.textContent = winner;
+            drawnNumber.classList.remove('pulse');
+            void drawnNumber.offsetWidth;
+            drawnNumber.classList.add('pulse');
+
+            playDing();
+            isDrawing = false;
+            saveState();
+            updateUI();
+        }
+
+        // NOUVEAU : Remet le tirage à zéro (sans revenir à la config)
+        function softReset() {
+            state.availableParticipants = state.allParticipants.filter(
+                p => !state.excludedParticipants.includes(p)
+            );
+            state.drawnParticipants = [];
+            state.drawHistory = [];
+
+            drawnNumber.textContent = '?';
+            drawnNumber.classList.remove('pulse');
+            finishedMsg.style.display = 'none';
+            drawBtn.disabled = false;
+
+            saveState();
+            updateUI();
+            showToast('Tirage réinitialisé', 'success');
+        }
+
+        // NOUVEAU : Retour à la configuration (bouton flèche ←)
+        function goBack() {
+            localStorage.removeItem(STATE_KEY);
+            state = {
+                mode: 'number',
+                allParticipants: [],
+                availableParticipants: [],
+                drawnParticipants: [],
+                excludedParticipants: [],
+                drawHistory: []
+            };
+            drawnNumber.textContent = '?';
+            drawnNumber.classList.remove('pulse');
+            finishedMsg.style.display = 'none';
+            showSetupMode();
+        }
+
+        // ==========================================
+        // MISE À JOUR DE L'INTERFACE
+        // ==========================================
+        function updateUI() {
+            const total = state.allParticipants.length;
+            const drawn = state.drawnParticipants.length;
+            const excluded = state.excludedParticipants.length;
+            const available = state.availableParticipants.length;
+
+            statsDisplay.textContent = `${available} disponible${available > 1 ? 's' : ''} · ${drawn} tiré${drawn > 1 ? 's' : ''} · ${excluded} absent${excluded > 1 ? 's' : ''}`;
+
+            // Grille des participants
+            participantItems.innerHTML = '';
+            state.allParticipants.forEach(p => {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.textContent = p;
+
+                if (state.drawnParticipants.includes(p)) {
+                    cell.classList.add('drawn');
+                } else if (state.excludedParticipants.includes(p)) {
+                    cell.classList.add('excluded');
+                }
+
+                // Cycle de clic : Disponible → Exclu → Tiré → Disponible
+                cell.addEventListener('click', () => {
+                    if (isDrawing) return;
+
+                    if (state.excludedParticipants.includes(p)) {
+                        // Exclu → Tiré manuellement
+                        state.excludedParticipants = state.excludedParticipants.filter(x => x !== p);
+                        state.availableParticipants = state.availableParticipants.filter(x => x !== p);
+                        if (!state.drawnParticipants.includes(p)) state.drawnParticipants.push(p);
+                    } else if (state.drawnParticipants.includes(p)) {
+                        // Tiré → Disponible
+                        state.drawnParticipants = state.drawnParticipants.filter(x => x !== p);
+                        if (!state.availableParticipants.includes(p)) state.availableParticipants.push(p);
+                    } else {
+                        // Disponible → Exclu
+                        state.availableParticipants = state.availableParticipants.filter(x => x !== p);
+                        if (!state.excludedParticipants.includes(p)) state.excludedParticipants.push(p);
+                    }
+
+                    // Remettre le bouton actif si on a libéré un participant
+                    if (state.availableParticipants.length > 0) {
+                        finishedMsg.style.display = 'none';
+                        drawBtn.disabled = false;
+                    }
+
+                    saveState();
+                    updateUI();
+                });
+
+                participantItems.appendChild(cell);
+            });
+
+            // Historique (badges)
+            historyBadges.innerHTML = '';
+            if (state.drawHistory.length > 0) {
+                state.drawHistory.forEach((item, index) => {
                     const badge = document.createElement('span');
                     badge.className = 'history-badge';
-                    badge.textContent = num;
+                    badge.textContent = item;
                     historyBadges.appendChild(badge);
                 });
-            } else { historySection.style.display = 'none'; } 
- 
-            renderGrid(); 
-        } 
- 
-        function renderGrid() { 
-            participantItems.innerHTML = ''; 
-            state.allParticipants.forEach(itemStr => { 
-                const div = document.createElement('div'); 
-                div.className = 'cell'; div.textContent = itemStr; 
-                div.setAttribute('role', 'button');
-                div.setAttribute('tabindex', '0');
-                 
-                if (state.drawnParticipants.includes(itemStr)) { 
-                    div.classList.add('drawn'); div.title = "A été tiré. Cliquer pour remettre en jeu."; 
-                    div.setAttribute('aria-label', `${itemStr}. A été tiré. Appuyez sur Entrée pour remettre en jeu.`);
-                } else if (state.excludedParticipants.includes(itemStr)) { 
-                    div.classList.add('excluded'); div.title = "Absent/Exclu. Cliquer pour marquer comme tiré manuellement.";
-                    div.setAttribute('aria-label', `${itemStr}. Exclu. Appuyez sur Entrée pour marquer comme tiré manuellement.`);
-                } else { 
-                    div.title = "Disponible. Cliquer pour marquer comme absent.";
-                    div.setAttribute('aria-label', `${itemStr}. Disponible. Appuyez sur Entrée pour marquer comme absent.`);
-                } 
-                 
-                div.addEventListener('click', () => toggleParticipantState(itemStr)); 
-                div.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        toggleParticipantState(itemStr);
-                    }
-                });
-                participantItems.appendChild(div); 
-            }); 
-        } 
- 
-        // Démarrage 
-        loadState(); 
-    </script> 
-</body> 
+            } else {
+                historyBadges.innerHTML = '<span class="history-placeholder">Aucun tirage</span>';
+            }
+
+			// Vérifier si terminé
+            if (state.availableParticipants.length === 0 && state.drawnParticipants.length > 0) {
+                finishedMsg.style.display = 'block';
+                drawBtn.disabled = true;
+            } else {
+                finishedMsg.style.display = 'none';
+                drawBtn.disabled = false;
+            }
+        }
+
+        // ==========================================
+        // INITIALISATION AU CHARGEMENT
+        // ==========================================
+        loadState();
+    </script>
+</body>
 </html>
+
+        
