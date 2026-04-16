@@ -5,9 +5,11 @@ Ce dépôt contient deux sections principales : `webapps/` et `ressources/`.
 ## Webapps (Applications pour les élèves)
 Ce sont des jeux interactifs conçus pour les élèves de l'école primaire qui travaillent avec les manuels scolaires *Décodage*. Vous pouvez trouver plus d'informations sur les manuels sur [https://decodage.edu-vd.ch/](https://decodage.edu-vd.ch/).
 
+Les webapps partagent une interface unifiée, une esthétique moderne et incluent de manière native un **Mode Sombre global** (Dark Mode) dont le choix est conservé en mémoire pour une expérience continue d'une application à l'autre.
+
 Les webapps disponibles sont :
 
-### 1. Pixel Binaire Pro (`webapps/binaire_studio.html`)
+### 1. Pixel Studio (`webapps/binaire_studio.html`)
 - **À quoi sert l'outil :** Un studio de codage interactif permettant de faire le lien entre des images matricielles (pixels) en noir et blanc et leur représentation binaire (0 pour le noir, 1 pour le blanc).
 - **Lien avec les activités Décodage :** Représentation de l'information (images, pixels).
 - **Demi-cycle concerné :** 5-6H
@@ -17,14 +19,14 @@ Les webapps disponibles sont :
   - Sauvegarde locale d'une "Galerie" / "Collection" de ses créations.
   - Exportation technique de l'œuvre finale en format image PNG.
 
-### 2. Messages Secrets Binaires (`webapps/binaire_message.html`)
-- **À quoi sert l'outil :** Un jeu interactif pour apprendre à chiffrer et déchiffrer des textes et caractères à l'aide de l'alphabet binaire.
+### 2. Mots secrets (`webapps/binaire_message.html`)
+- **À quoi sert l'outil :** Un jeu interactif en deux parties pour apprendre à chiffrer et déchiffrer des mots à l'aide de l'alphabet binaire avec un camarade.
 - **Lien avec les activités Décodage :** Représentation de l'information (texte).
 - **Demi-cycle concerné :** 7-8H
 - **Fonctionnalités :**
-  - Entraînement au passage du code binaire aux caractères (et vice versa).
-  - Support de raccourcis clavier rapides : touches numériques (1 à 5) pour saisir les bits et touche "Entrée" pour valider.
-  - Effets visuels et animations de célébration (confettis) pour renforcer la ludification.
+  - **Partie en deux étapes :** création d'un mot secret codé en binaire (max 4 lettres) que l'on transmet à un camarade, puis décodage d'un message reçu caractère par caractère.
+  - **Progression adaptative :** mots de difficulté croissante (lettres A-G, puis A-O, puis A-Z) avec une assistance progressive au décodage (pas d'aide, puis la somme des bits, puis l'alphabet binaire complet).
+  - Touche de validation rapide au clavier ("Entrée") et design épuré pour faciliter la concentration.
 
 ### 3. Routage Réseau (`webapps/routage_reseau.html`)
 - **À quoi sert l'outil :** Une simulation visuelle qui demande aux élèves de trouver le chemin le plus rapide pour acheminer un "paquet" d'un point A (ordinateur) à un point B (serveur) au travers d'un graphe.
@@ -36,7 +38,7 @@ Les webapps disponibles sont :
   - Suivi en temps réel du coût du chemin (Unité de Temps/UTI).
   - Validateur d'optimalité qui compare le chemin de l'élève avec le chemin mathématiquement le plus court.
 
-### 4. Codage binaire - Entraînement PRO (`webapps/binaire_codage.html`)
+### 4. Codage binaire (`webapps/binaire_codage.html`)
 - **À quoi sert l'outil :** Une plateforme d'entraînement intensif au passage des nombres entiers (décimal) vers leur écriture en binaire, et inversément.
 - **Lien avec les activités Décodage :** Représentation de l'information (nombres).
 - **Demi-cycle concerné :** 7-8H

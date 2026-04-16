@@ -14,171 +14,435 @@
             --text-main: #0f172a;
             --text-light: #64748b;
             --border: #e2e8f0;
+            --header-bg: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            --header-text: #ffffff;
+            --section-title: #1e3a8a;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --badge-bg: #e0f2fe;
+            --badge-text: #0284c7;
+            --badge-prof-bg: #f1f5f9;
+            --badge-prof-text: #475569;
+            --section-bg: transparent;
+            --btn-icon-hover: #e2e8f0;
         }
+
+        body.dark {
+            --primary: #3b82f6;
+            --primary-hover: #60a5fa;
+            --secondary: #94a3b8;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-light: #cbd5e1;
+            --border: #334155;
+            --header-bg: linear-gradient(135deg, #0f172a, #1d4ed8);
+            --header-text: #f8fafc;
+            --section-title: #60a5fa;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --badge-bg: #0c4a6e;
+            --badge-text: #38bdf8;
+            --badge-prof-bg: #334155;
+            --badge-prof-text: #cbd5e1;
+            --section-bg: #1e293b;
+            --btn-icon-hover: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
-            margin: 0;
-            padding: 2rem;
             line-height: 1.5;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Action Buttons Top Right */
+        .action-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+        .icon-action-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--header-text);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .icon-action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
         }
 
         header {
             text-align: center;
-            margin-bottom: 3rem;
+            padding: 4rem 2rem;
+            background: var(--header-bg);
+            color: var(--header-text);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         h1 {
-            color: var(--primary);
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-container {
+            margin-bottom: 4rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .section-icon {
+            background: var(--badge-bg);
+            color: var(--primary);
+            padding: 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .resources-icon {
+            background: var(--badge-prof-bg);
+            color: var(--secondary);
         }
 
         h2 {
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 0.5rem;
-            margin-top: 2.5rem;
-            color: var(--secondary);
+            color: var(--section-title);
+            font-size: 1.5rem;
+            font-weight: 700;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
         }
 
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            padding: 1.5rem;
+            border-radius: 16px;
+            padding: 1.75rem;
             text-decoration: none;
             color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        .card.resource::before {
+            background: var(--secondary);
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow-hover);
             border-color: var(--primary);
+        }
+        .card.resource:hover {
+            border-color: var(--secondary);
+        }
+
+        .card:hover::before {
+            transform: scaleX(1);
         }
 
         .card-title {
             font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
             color: var(--primary);
+            transition: color 0.2s;
+        }
+        .card.resource .card-title {
+            color: var(--text-main);
+        }
+        .card:hover .card-title {
+            color: var(--primary-hover);
         }
 
         .card-desc {
             color: var(--text-light);
-            font-size: 0.875rem;
+            font-size: 0.95rem;
             flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .badges-wrapper {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 1rem;
         }
 
         .badge {
             display: inline-block;
-            background-color: #e0f2fe;
-            color: #0284c7;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
             font-size: 0.75rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            align-self: flex-start;
+            font-weight: 700;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
         }
 
         .badge.prof {
-            background-color: #f1f5f9;
-            color: #475569;
+            background-color: var(--badge-prof-bg);
+            color: var(--badge-prof-text);
         }
 
         footer {
-            margin-top: 4rem;
+            margin-top: 2rem;
+            padding: 3rem 1rem;
             text-align: center;
             color: var(--text-light);
             font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+            background: var(--section-bg);
         }
 
         footer a {
             color: var(--primary);
             text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        footer a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+        footer a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        .filter-btn {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover:not(.active) {
+            background-color: var(--badge-bg);
+        }
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Éducation numérique</h1>
+        <div class="action-buttons">
+            <button class="icon-action-btn" id="themeToggleBtn" title="Mode sombre/clair">
+                <svg id="icon-sun" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            </button>
+        </div>
+        <h1>Éducation Numérique</h1>
         <p>Applications interactives et ressources pour les enseignant·e·s (Manuel Décodage)</p>
     </header>
 
     <main>
-        <section>
-            <h2>Cycle 2 (5-6H)</h2>
-            <div class="grid">
-                <a href="webapps/binaire_studio.html" class="card">
-                    <span class="badge">5-6H</span>
-                    <div class="card-title">Pixel Binaire Pro</div>
+        <!-- STUDENT WEBAPPS -->
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                </div>
+                <h2>Webapps pour élèves</h2>
+            </div>
+            
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filterApps('all')">Toutes</button>
+                <button class="filter-btn" onclick="filterApps('5-6H')">5-6H</button>
+                <button class="filter-btn" onclick="filterApps('7-8H')">7-8H</button>
+            </div>
+
+            <div class="grid" id="student-apps-grid">
+                <a href="webapps/binaire_studio.html" class="card student-app" data-level="5-6H">
+                    <div class="badges-wrapper">
+                        <span class="badge">5-6H</span>
+                        <span class="badge">Pixels</span>
+                    </div>
+                    <div class="card-title">Pixel Studio</div>
                     <div class="card-desc">Studio de codage pour créer des dessins en coloriant des pixels et comprendre leur représentation binaire.</div>
                 </a>
-            </div>
-        </section>
 
-        <section>
-            <h2>Cycle 2 (7-8H)</h2>
-            <div class="grid">
-                <a href="webapps/binaire_message.html" class="card">
-                    <span class="badge">7-8H</span>
-                    <div class="card-title">Messages secrets binaires</div>
-                    <div class="card-desc">Jeu ludique pour encoder et décoder des messages secrets en utilisant le binaire.</div>
+                <a href="webapps/binaire_message.html" class="card student-app" data-level="7-8H">
+                    <div class="badges-wrapper">
+                        <span class="badge">7-8H</span>
+                        <span class="badge">Secret</span>
+                    </div>
+                    <div class="card-title">Mots secrets</div>
+                    <div class="card-desc">Jeu ludique pour encoder et décoder des messages secrets avec son camarade en utilisant l'alphabet binaire.</div>
                 </a>
 
-                <a href="webapps/routage_reseau.html" class="card">
-                    <span class="badge">7-8H</span>
+                <a href="webapps/routage_reseau.html" class="card student-app" data-level="7-8H">
+                    <div class="badges-wrapper">
+                        <span class="badge">7-8H</span>
+                        <span class="badge">Réseau</span>
+                    </div>
                     <div class="card-title">Routage réseau</div>
-                    <div class="card-desc">Activité interactive axée sur le routage de paquets dans un réseau.</div>
+                    <div class="card-desc">Activité interactive axée sur le routage de paquets dans un réseau pour simuler le fonctionnement d'Internet.</div>
                 </a>
 
-                <a href="webapps/binaire_codage.html" class="card">
-                    <span class="badge">7-8H</span>
-                    <div class="card-title">Codage binaire (Entraînement PRO)</div>
-                    <div class="card-desc">Outil interactif pour apprendre et s'entraîner au codage binaire.</div>
+                <a href="webapps/binaire_codage.html" class="card student-app" data-level="7-8H">
+                    <div class="badges-wrapper">
+                        <span class="badge">7-8H</span>
+                        <span class="badge">Nombres</span>
+                    </div>
+                    <div class="card-title">Codage binaire</div>
+                    <div class="card-desc">Outil interactif pour apprendre et s'entraîner à convertir des nombres décimaux en binaire.</div>
                 </a>
 
-                <a href="webapps/bit_de_parite.html" class="card">
-                    <span class="badge">7-8H</span>
+                <a href="webapps/bit_de_parite.html" class="card student-app" data-level="7-8H">
+                    <div class="badges-wrapper">
+                        <span class="badge">7-8H</span>
+                        <span class="badge">Contrôle</span>
+                    </div>
                     <div class="card-title">Bit de parité</div>
-                    <div class="card-desc">Jeu et entraînement pour découvrir la magie du bit de parité et la détection d'erreurs.</div>
+                    <div class="card-desc">Jeu et entraînement pour découvrir la détection d'erreurs dans une transmission informatique.</div>
                 </a>
             </div>
-        </section>
+        </div>
 
-        <section>
-            <h2>Ressources pour les enseignant·e·s</h2>
+        <!-- TEACHER RESOURCES -->
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-icon resources-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <h2>Ressources pour enseignant·e·s</h2>
+            </div>
+            
             <div class="grid">
-                <a href="ressources/bareme.html" class="card">
-                    <span class="badge prof">Outil</span>
+                <a href="ressources/bareme.html" class="card resource">
+                    <div class="badges-wrapper">
+                        <span class="badge prof">Évaluation</span>
+                    </div>
                     <div class="card-title">Générateur de barème</div>
-                    <div class="card-desc">Outil simple et sans publicité pour générer et exporter des barèmes de notation.</div>
+                    <div class="card-desc">Outil simple et sans publicité pour générer, imprimer et exporter des barèmes de notation.</div>
                 </a>
 
-                <a href="ressources/tirage.html" class="card">
-                    <span class="badge prof">Outil</span>
+                <a href="ressources/tirage.html" class="card resource">
+                    <div class="badges-wrapper">
+                        <span class="badge prof">Gestion de classe</span>
+                    </div>
                     <div class="card-title">Tirage au sort</div>
-                    <div class="card-desc">Outil rapide et efficace pour effectuer des tirages au sort en classe.</div>
+                    <div class="card-desc">Outil rapide et visuel avec mémorisation pour désigner un élève au hasard.</div>
                 </a>
             </div>
-        </section>
+        </div>
     </main>
 
     <footer>
-        <p>Webapps et ressources disponibles sous licence <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a>.</p>
+        <p>Webapps et ressources disponibles sous licence <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">AGPL-3.0</a></p>
+        <p style="margin-top: 10px;">Animation Education Numérique · <a href="https://www.hepvs.ch/fr/prestations-de-services/animation-pedagogique-12811/" target="_blank" rel="noopener noreferrer">HEP-VS</a></p>
     </footer>
 
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+            localStorage.setItem('global_theme', theme);
+            iconSun.style.display = theme === 'dark' ? 'block' : 'none';
+            iconMoon.style.display = theme === 'dark' ? 'none' : 'block';
+        }
+
+        // Initialize Theme (first priority to local storage, then light by default)
+        const savedTheme = localStorage.getItem('global_theme') || 'light';
+        setTheme(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = document.body.classList.contains('dark');
+            setTheme(isDark ? 'light' : 'dark');
+        });
+
+        function filterApps(level) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if ((level === 'all' && btn.innerText === 'Toutes') || btn.innerText === level) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.student-app').forEach(app => {
+                if (level === 'all' || app.getAttribute('data-level') === level) {
+                    app.style.display = 'flex';
+                } else {
+                    app.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>

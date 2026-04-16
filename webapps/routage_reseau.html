@@ -17,6 +17,35 @@
             --warn: #e65100; --warn-bg: #fff3e0; --warn-border: #ff9800; 
             --shadow-color: rgba(0, 0, 0, 0.3); 
         } 
+
+        body.dark { 
+            --bg-gradient-start: #0f172a; --bg-gradient-end: #1e1b4b; 
+            --card-bg: #1e293b; --card-border: #334155; 
+            --container-bg: #0f172a; 
+            --text-main: #f8fafc; --text-secondary: #94a3b8; --text-muted: #64748b; 
+            --accent: #6366f1; --accent-dark: #4f46e5; 
+            --badge-bg: #312e81; --badge-color: #818cf8; 
+            --success: #34d399; --success-bg: #064e3b; --success-border: #059669; 
+            --error: #f87171; --error-bg: #7f1d1d; --error-border: #991b1b; 
+            --warn: #fbbf24; --warn-bg: #78350f; --warn-border: #b45309; 
+            --shadow-color: rgba(0, 0, 0, 0.5); 
+        }
+
+        .action-buttons { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 10; }
+        .icon-action-btn { background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; }
+        body.dark .icon-action-btn { background: rgba(0, 0, 0, 0.4); border-color: rgba(255,255,255,0.1); }
+        .icon-action-btn:hover { background-color: rgba(255, 255, 255, 0.4); transform: scale(1.05); }
+
+        body.dark .instructions { background: #1e293b; border-color: #4f46e5; color: #cbd5e1; }
+        body.dark .network-container { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-color: #334155; }
+        body.dark .path-display { background: #1e293b; border-color: #334155; }
+        body.dark .time-box { background: #0f172a; border-color: var(--accent-dark); color: #818cf8; }
+        body.dark .node-router { background: #1e293b; border-color: #475569; color: #cbd5e1; }
+        body.dark .node.in-path { background: #78350f !important; border-color: #fbbf24 !important; color: #fde68a !important; box-shadow: 0 0 14px rgba(245, 158, 11, 0.3); }
+        body.dark .node.in-path.node-source { background: #065f46 !important; border-color: #34d399 !important; color: #a7f3d0 !important; }
+        body.dark .node.in-path.node-dest { background: #991b1b !important; border-color: #f87171 !important; color: #fecaca !important; }
+        body.dark .node-source { background: #064e3b; border-color: #059669; color: #34d399; }
+        body.dark .node-dest { background: #7f1d1d; border-color: #991b1b; color: #f87171; }
  
         * { margin: 0; padding: 0; box-sizing: border-box; } 
  
@@ -146,6 +175,12 @@
     </style> 
 </head> 
 <body> 
+<div class="action-buttons">
+    <button class="icon-action-btn" id="themeToggleBtn" title="Mode sombre/clair">
+        <svg id="icon-sun" style="display:none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg id="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+</div>
 <canvas id="confetti-canvas"></canvas> 
 <div class="container"> 
     <h1>🌐 Routage réseau – Trouve le chemin !</h1> 
@@ -451,6 +486,49 @@ function launchConfetti() {
 } 
  
 newNetwork(); 
+
+// THEME
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const iconSun = document.getElementById('icon-sun');
+const iconMoon = document.getElementById('icon-moon');
+
+function setTheme(theme) {
+    if (theme === 'dark') document.body.classList.add('dark');
+    else document.body.classList.remove('dark');
+    localStorage.setItem('global_theme', theme);
+    iconSun.style.display = theme === 'dark' ? 'block' : 'none';
+    iconMoon.style.display = theme === 'dark' ? 'none' : 'block';
+    
+    // Si on a besoin de redessiner les SVG edges en dark mode:
+    if (parsedEdges && parsedEdges.length > 0) renderEdges();
+}
+
+const savedTheme = localStorage.getItem('global_theme') || 'light';
+setTheme(savedTheme);
+
+themeToggleBtn.addEventListener('click', () => {
+    setTheme(document.body.classList.contains('dark') ? 'light' : 'dark');
+});
+
+// Update renderEdges for dark mode
+const originalRenderEdges = renderEdges;
+renderEdges = function() {
+    originalRenderEdges();
+    const isDark = document.body.classList.contains('dark');
+    const svg = document.getElementById('network-svg');
+    svg.querySelectorAll('line').forEach(line => {
+        if (line.getAttribute('stroke') === '#c5cbe9') {
+            line.setAttribute('stroke', isDark ? '#475569' : '#c5cbe9');
+        }
+    });
+    svg.querySelectorAll('circle').forEach(circle => {
+        if (circle.getAttribute('fill') === '#9fa8da') {
+            circle.setAttribute('fill', isDark ? '#334155' : '#9fa8da');
+        }
+    });
+}
+// Render immediately with correct style
+renderEdges();
 </script> 
 </body> 
 </html>
