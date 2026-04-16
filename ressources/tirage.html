@@ -386,30 +386,35 @@
         let audioCtx = null;
         let isMuted = false;
 
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }
-        function playTick() {
-            if (isMuted || !audioCtx) return;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'square'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
-            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-        }
-        function playDing() {
-            if (isMuted || !audioCtx) return;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
-            osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.8);
+        function playSound(type) {
+            if (isMuted) return;
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const t = audioCtx.currentTime;
+
+            if (type === 'tick') {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = 'square'; osc.frequency.setValueAtTime(600, t);
+                osc.frequency.exponentialRampToValueAtTime(800, t + 0.05);
+                gain.gain.setValueAtTime(0.05, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+                osc.start(); osc.stop(t + 0.05);
+            } else if (type === 'ding') {
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, t);
+                osc.frequency.setValueAtTime(659.25, t + 0.1);
+                gain.gain.setValueAtTime(0.2, t);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.8);
+                osc.start(); osc.stop(t + 0.8);
+            }
         }
 
         // ==========================================
@@ -535,7 +540,6 @@
         }
 
         function initializeDraw() {
-            initAudio();
             let parsedList = [];
 
             if (state.mode === 'number') {
@@ -565,7 +569,7 @@
 
         function triggerRoulette() {
             if (isDrawing || state.availableParticipants.length === 0) return;
-            isDrawing = true; drawBtn.disabled = true; initAudio();
+            isDrawing = true; drawBtn.disabled = true;
 
             let elapsed = 0; const duration = 1500; const interval = 60;
             drawnNumber.classList.add('rolling');
@@ -573,7 +577,7 @@
             const timer = setInterval(() => {
                 elapsed += interval;
                 drawnNumber.textContent = state.availableParticipants[Math.floor(Math.random() * state.availableParticipants.length)];
-                playTick();
+                playSound('tick');
                 if (elapsed >= duration) { clearInterval(timer); finalizeDraw(); }
             }, interval);
         }
@@ -592,7 +596,7 @@
             void drawnNumber.offsetWidth;
             drawnNumber.classList.add('pulse');
 
-            playDing();
+            playSound('ding');
             isDrawing = false;
             saveState();
             updateUI();

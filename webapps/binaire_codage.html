@@ -246,31 +246,45 @@
 // AUDIO ENGINE (Web Audio API) 
 // ========================================== 
 let audioCtx = null; 
-function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if(audioCtx.state === 'suspended') audioCtx.resume(); } 
- 
+
 function playSound(type) { 
-    if (!audioCtx) return; 
-    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); 
-    osc.connect(gain); gain.connect(audioCtx.destination); 
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    const t = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
      
     if (type === 'click') { 
-        osc.type = 'square'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); 
-        osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05); 
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05); 
-        osc.start(); osc.stop(audioCtx.currentTime + 0.05); 
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(400, t);
+        osc.frequency.exponentialRampToValueAtTime(100, t + 0.05);
+        gain.gain.setValueAtTime(0.1, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+        osc.start();
+        osc.stop(t + 0.05);
     } else if (type === 'success') { 
-        osc.type = 'sine'; osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // Do 
-        osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // Mi 
-        osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // Sol 
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime); 
-        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4); 
-        osc.start(); osc.stop(audioCtx.currentTime + 0.4); 
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, t);
+        osc.frequency.setValueAtTime(659.25, t + 0.1);
+        osc.frequency.setValueAtTime(783.99, t + 0.2);
+        gain.gain.setValueAtTime(0.1, t);
+        gain.gain.linearRampToValueAtTime(0, t + 0.4);
+        osc.start();
+        osc.stop(t + 0.4);
     } else if (type === 'error') { 
-        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime); 
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime); 
-        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3); 
-        osc.start(); osc.stop(audioCtx.currentTime + 0.3); 
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, t);
+        gain.gain.setValueAtTime(0.15, t);
+        gain.gain.linearRampToValueAtTime(0, t + 0.3);
+        osc.start();
+        osc.stop(t + 0.3);
     } 
 } 
  
@@ -337,7 +351,7 @@ function toggleCalc() {
  
 function toggleBitIndex(i) { 
     if (decBinLocked) return; 
-    initAudio(); playSound('click'); resetHelpTimer(); 
+    playSound('click'); resetHelpTimer();
      
     calcState[i] = calcState[i] ? 0 : 1; 
      
@@ -400,7 +414,7 @@ function newDecToBin() {
  
 function checkDecToBin() { 
     if (decBinLocked || currentDecNumber === null) return; 
-    initAudio(); resetHelpTimer(); 
+    resetHelpTimer();
      
     const userBin = calcState.slice(8-currentBits).join(''); 
     const expectedBin = currentDecNumber.toString(2).padStart(currentBits, '0'); 
@@ -431,7 +445,7 @@ function newBinToDec() {
  
 function checkBinToDec() { 
     if (binDecLocked || !currentBinString) return; 
-    initAudio(); resetHelpTimer(); 
+    resetHelpTimer();
      
     const userVal = parseInt(document.getElementById('binDec-input').value, 10); 
     const expectedVal = parseInt(currentBinString, 2); 
