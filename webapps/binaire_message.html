@@ -720,30 +720,44 @@
         // AUDIO ENGINE (Web Audio API) 
         // ========================================== 
         let audioCtx = null;
-        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume(); }
 
         function playSound(type) {
-            if (!audioCtx) return;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            const t = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
 
             if (type === 'click') {
-                osc.type = 'square'; osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.05);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(300, t);
+                osc.frequency.exponentialRampToValueAtTime(100, t + 0.05);
+                gain.gain.setValueAtTime(0.1, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+                osc.start();
+                osc.stop(t + 0.05);
             } else if (type === 'success') {
-                osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.1);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, t);
+                osc.frequency.setValueAtTime(800, t + 0.1);
+                gain.gain.setValueAtTime(0.1, t);
+                gain.gain.linearRampToValueAtTime(0, t + 0.3);
+                osc.start();
+                osc.stop(t + 0.3);
             } else if (type === 'error') {
-                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, t);
+                gain.gain.setValueAtTime(0.2, t);
+                gain.gain.linearRampToValueAtTime(0, t + 0.3);
+                osc.start();
+                osc.stop(t + 0.3);
             }
         }
 
@@ -836,7 +850,6 @@
         let decodeMistakes = 0;
 
         function prepareDecode() {
-            initAudio();
             const input = document.getElementById('decoder-input').value.trim();
             const blocks = input.replace(/[^01]/g, ' ').split(/\s+/).filter(b => b.length === 5);
             const btn = document.getElementById('btn-start-decode');
@@ -850,7 +863,6 @@
         }
 
         function startDecoding() {
-            initAudio();
             document.getElementById('btn-start-decode').style.display = 'none';
             document.getElementById('decoder-input').disabled = true;
             document.getElementById('decoder-workspace').style.display = 'block';
@@ -1034,7 +1046,7 @@
 
         function toggleBit(idx) {
             if (encodeLocked || encodeIndex >= encodeWord.length) return;
-            initAudio(); playSound('click');
+            playSound('click');
             encodeBits[idx] = encodeBits[idx] ? 0 : 1;
             renderGame(); updateLiveCalc();
         }
@@ -1051,7 +1063,6 @@
 
         function checkEncodeLetter() {
             if (encodeLocked || encodeIndex >= encodeWord.length) return;
-            initAudio();
 
             const letter = encodeWord[encodeIndex];
             const expected = rankToBin5(letterToRank(letter));

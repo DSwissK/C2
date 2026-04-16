@@ -302,45 +302,43 @@
     // ==========================================
     // AUDIO (Web Audio API)
     // ==========================================
-    function initAudio() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
+    function playSound(type) {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
 
-    function playClick() {
-        if (!audioCtx) return;
-        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.type = 'square';
-        o.frequency.setValueAtTime(600, audioCtx.currentTime);
-        g.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-        o.start(); o.stop(audioCtx.currentTime + 0.04);
-    }
-
-    function playSuccess() {
-        if (!audioCtx) return;
         const t = audioCtx.currentTime;
-        [523.25, 659.25, 783.99].forEach((f, i) => {
+
+        if (type === 'click') {
             const o = audioCtx.createOscillator(), g = audioCtx.createGain();
             o.connect(g); g.connect(audioCtx.destination);
-            o.type = 'sine'; o.frequency.value = f;
-            g.gain.setValueAtTime(0.15, t + i * 0.12);
-            g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.12 + 0.3);
-            o.start(t + i * 0.12); o.stop(t + i * 0.12 + 0.3);
-        });
-    }
-
-    function playError() {
-        if (!audioCtx) return;
-        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.type = 'sawtooth';
-        o.frequency.setValueAtTime(300, audioCtx.currentTime);
-        o.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.25);
-        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
-        o.start(); o.stop(audioCtx.currentTime + 0.25);
+            o.type = 'square';
+            o.frequency.setValueAtTime(600, t);
+            g.gain.setValueAtTime(0.04, t);
+            g.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+            o.start(); o.stop(t + 0.04);
+        } else if (type === 'success') {
+            [523.25, 659.25, 783.99].forEach((f, i) => {
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.connect(g); g.connect(audioCtx.destination);
+                o.type = 'sine'; o.frequency.value = f;
+                g.gain.setValueAtTime(0.15, t + i * 0.12);
+                g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.12 + 0.3);
+                o.start(t + i * 0.12); o.stop(t + i * 0.12 + 0.3);
+            });
+        } else if (type === 'error') {
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.connect(g); g.connect(audioCtx.destination);
+            o.type = 'sawtooth';
+            o.frequency.setValueAtTime(300, t);
+            o.frequency.exponentialRampToValueAtTime(150, t + 0.25);
+            g.gain.setValueAtTime(0.1, t);
+            g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+            o.start(); o.stop(t + 0.25);
+        }
     }
 
     // ==========================================
@@ -411,7 +409,6 @@
     // DESSIN
     // ==========================================
     function startDraw(cell) {
-        initAudio();
         isDrawing = true;
         drawingOn = !cell.classList.contains('on');
         applyDraw(cell);
@@ -420,8 +417,8 @@
     function applyDraw(cell) {
         if (cell.classList.contains('locked')) return;
         const wasOn = cell.classList.contains('on');
-        if (drawingOn && !wasOn) { cell.classList.add('on'); playClick(); }
-        else if (!drawingOn && wasOn) { cell.classList.remove('on'); playClick(); }
+        if (drawingOn && !wasOn) { cell.classList.add('on'); playSound('click'); }
+        else if (!drawingOn && wasOn) { cell.classList.remove('on'); playSound('click'); }
         if (currentMode === 'editor') updateEditorOutput();
     }
 
@@ -457,7 +454,6 @@
         // Désactiver immédiatement pour empêcher le spam
         verifyBtn.disabled = true;
 
-        initAudio();
         const wrapper = document.getElementById('grid-decode');
         const rows = wrapper.querySelectorAll('.grid-row');
         const size = currentPattern.data.length;
@@ -473,7 +469,7 @@
         }
 
         if (correct) {
-            playSuccess();
+            playSound('success');
             addToGallery(currentPattern.data, currentPattern.name);
             showToast('🎉 Bravo ! « ' + currentPattern.name + ' » décodé !');
 
@@ -482,7 +478,7 @@
                 initDecode();
             }, 1200);
         } else {
-            playError();
+            playSound('error');
             showToast('❌ Pas encore correct… Essaie encore !');
 
             // Réactiver après 1 seconde pour éviter le spam
@@ -545,8 +541,7 @@
         if (input.value === expected) {
             input.classList.add('correct');
             input.readOnly = true;
-            initAudio();
-            playClick();
+            playSound('click');
 
             const allInputs = Array.from(document.querySelectorAll('#encode-inputs input'));
 
@@ -559,7 +554,7 @@
             if (allInputs.every(i => i.classList.contains('correct'))) {
                 encodeComplete = true;
                 setTimeout(() => {
-                    playSuccess();
+                    playSound('success');
                     addToGallery(currentPattern.data, currentPattern.name);
                     showToast('🎉 Bravo ! « ' + currentPattern.name + ' » encodé !');
                     setTimeout(() => {
@@ -568,8 +563,7 @@
                 }, 200);
             }
         } else {
-            initAudio();
-            playError();
+            playSound('error');
             input.style.borderColor = 'var(--error)';
             setTimeout(() => { input.style.borderColor = ''; }, 1000);
         }
